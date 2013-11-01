@@ -7,13 +7,17 @@
 package jaxb.src;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.math.BigDecimal.ONE;
+import java.math.BigInteger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import jaxb.clase.Alumnos;
+import jaxb.clase.Alumnos.Alumno;
 import jaxb.clase.CursoType;
 import jaxb.clase.DatosProf;
 
@@ -45,7 +49,35 @@ public class ModificaClase {
             // El método getValue() retorna el modelo de contenido (content model) y el valor de los atributos del elemento
             CursoType cursoType = (CursoType) jaxbElement.getValue();
 
-            // Obtenemos una instancia de tipo PedidoType para obtener un Objeto de tipo DatosProf
+            // Lista de alumnos que será la que marshalicemos más tarde
+            Alumnos listaAlumnos = cursoType.getAlumnos();
+            
+            // Creamos dos variables locales para guardar datos de alumnos que
+            // más tarde añadiremos a la lista para marshalizarlos
+            Alumno alumno1, alumno2;
+            
+            // Vamos allá con el primer alumno
+            alumno1 = new Alumno();
+            alumno1.setNombreAlumno("Ruidoquedito");
+            alumno1.setDireccion("San Periquín del Valle, 33");
+            alumno1.setEdad(53);
+            alumno1.setTelefono(BigInteger.valueOf(44444));
+            alumno1.setComentario("este alumno es un poco tarambainas");
+
+            // Vamos a meter los datos del segundo alumno
+            alumno2 = new Alumno();
+            alumno2.setNombreAlumno("Syd Barrett");
+            alumno2.setDireccion("Todos los muertos, 15");
+            alumno2.setEdad(70);
+            alumno2.setTelefono(BigInteger.valueOf(33333));
+            alumno2.setComentario("este alumno tiene problemas con las drogas");            
+            
+            // Añadimos los alumnos a la lista
+            listaAlumnos.getAlumno().add(alumno1);
+            listaAlumnos.getAlumno().add(alumno2);
+            
+            // Ya puestos, vamos a cambiar también los datos del profesor
+            // Obtenemos una instancia de tipo cursoType para obtener un Objeto de tipo DatosProf
             DatosProf profesor = cursoType.getProfesor();
 
             // Establecemos los datos
@@ -78,7 +110,7 @@ public class ModificaClase {
   
         } catch (JAXBException je) {
             System.out.println(je.getCause()) ;
-        } catch (IOException ioe) {
+        } catch (FileNotFoundException ioe) {
             System.out.println(ioe.getMessage());
         }
     } // main()
